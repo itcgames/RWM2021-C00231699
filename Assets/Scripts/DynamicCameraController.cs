@@ -17,8 +17,15 @@ public class DynamicCameraController : MonoBehaviour
     private float timerCounter = 0;
     private float catchUpVelocity;
 
+
+    public void Contruct(GameObject player, float cameraDelay, float maxSpeed)
+    {
+        Player = player;
+        CameraDelay = cameraDelay;
+        MaxSpeed = maxSpeed;
+    }
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         Vector3 currentPlayerPosition = Player.transform.position;
         //currentPlayerPosition = currentPlayerPosition - new Vector3(PermanentOffset.x, PermanentOffset.y, 0);
@@ -34,12 +41,12 @@ public class DynamicCameraController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         setCamera();
     }
 
-    void setCamera()
+    public void setCamera()
     {
         Vector3 currentCameraPosition = transform.position;
         Vector3 currentPlayerPosition = Player.transform.position;
@@ -52,14 +59,14 @@ public class DynamicCameraController : MonoBehaviour
             newCamPos.x = currentPlayerPosition.x;
             newCamPos.y = currentPlayerPosition.y;
         }
-        else if (newDiff.magnitude < 0.1f)
+        else if (newDiff.magnitude < 0.05f)
         {
             newCamPos.x = currentPlayerPosition.x;
             newCamPos.y = currentPlayerPosition.y;
             runOnce = false;
             CaughtPlayer = true;
         }
-        else if (newDiff.magnitude > 0.1f && runOnce == false)
+        else if (newDiff.magnitude > 0.05f && runOnce == false)
         {
             runOnce = true;
             timerCounter = CameraDelay;
@@ -77,7 +84,7 @@ public class DynamicCameraController : MonoBehaviour
 
                 if ((catchUpVelocity + CameraAcceleration) <= MaxSpeed)
                 {
-                    catchUpVelocity += CameraAcceleration; 
+                    catchUpVelocity += CameraAcceleration;
                 }
                 newDiff = newDiff * catchUpVelocity;
 
@@ -91,5 +98,10 @@ public class DynamicCameraController : MonoBehaviour
         newCamPos.z = transform.position.z;
         transform.position = newCamPos;
         lastPlayerPosition = Player.transform.position;
+    }
+
+    public float getVel()
+    {
+        return catchUpVelocity;    
     }
 }
