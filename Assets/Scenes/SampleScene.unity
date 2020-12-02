@@ -618,6 +618,56 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 874952542}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: CameraDelay
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: lockXAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: lockYAxis
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: MaxSpeed
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: CameraAcceleration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: boundaryTopLeft.x
+      value: -12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: boundaryTopLeft.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: boundaryBottomRight.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: boundaryBottomRight.y
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: useBoundaryPositions
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338046, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: m_Name

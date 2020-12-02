@@ -10,6 +10,11 @@ public class DynamicCameraController : MonoBehaviour
     public float CameraDelay = 0;
     public bool AccelBasedOnDistance = false;
     public float CameraAcceleration = 1;
+    public bool lockXAxis = false;
+    public bool lockYAxis = false;
+    public bool useBoundaryPositions = false;
+    public Vector2 boundaryTopLeft;
+    public Vector2 boundaryBottomRight;
 
     private Vector3 lastPlayerPosition;
     private bool CaughtPlayer = true;
@@ -56,13 +61,17 @@ public class DynamicCameraController : MonoBehaviour
         Vector2 newDiff = new Vector2(differenceVector.x, differenceVector.y);
         if(CameraDelay <= 0)
         {
-            newCamPos.x = currentPlayerPosition.x;
-            newCamPos.y = currentPlayerPosition.y;
+            if(lockXAxis == false)
+                newCamPos.x = currentPlayerPosition.x;
+            if (lockYAxis == false)
+                newCamPos.y = currentPlayerPosition.y;
         }
         else if (newDiff.magnitude < 0.05f)
         {
-            newCamPos.x = currentPlayerPosition.x;
-            newCamPos.y = currentPlayerPosition.y;
+            if (lockXAxis == false)
+                newCamPos.x = currentPlayerPosition.x;
+            if (lockYAxis == false)
+                newCamPos.y = currentPlayerPosition.y;
             runOnce = false;
             CaughtPlayer = true;
         }
@@ -88,12 +97,25 @@ public class DynamicCameraController : MonoBehaviour
                 }
                 newDiff = newDiff * catchUpVelocity;
 
-                newCamPos.x = currentCameraPosition.x + newDiff.x/1000;
-                newCamPos.y = currentCameraPosition.y + newDiff.y/1000;
+                if (lockXAxis == false)
+                    newCamPos.x = currentCameraPosition.x + newDiff.x/1000;
+                if (lockYAxis == false)
+                    newCamPos.y = currentCameraPosition.y + newDiff.y/1000;
             }
         }
 
+        if(useBoundaryPositions == true)
+        {
+            if(newCamPos.x < boundaryTopLeft.x)
+                newCamPos.x = boundaryTopLeft.x;
+            if (newCamPos.y > boundaryTopLeft.y)
+                newCamPos.y = boundaryTopLeft.y;
 
+            if (newCamPos.x > boundaryBottomRight.x)
+                newCamPos.x = boundaryBottomRight.x;
+            if (newCamPos.y < boundaryBottomRight.y)
+                newCamPos.y = boundaryBottomRight.y;
+        }
 
         newCamPos.z = transform.position.z;
         transform.position = newCamPos;
