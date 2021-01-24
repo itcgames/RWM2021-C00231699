@@ -4,154 +4,135 @@ using UnityEngine;
 
 public class DynamicCameraController : MonoBehaviour
 {
+    // General
     public GameObject Player;
-    public Vector2 PermanentOffset = new Vector2(-1,0);
-    public float MaxSpeed = 1;
-    public float CameraDelay = 0;
-    public bool AccelBasedOnDistance = false;
-    public float CameraAcceleration = 1;
+
+    // Point of focus
+    public bool usePointOfFocus = false;
+    public GameObject PointOfFocus;
+
+    // Camera locking
     public bool lockXAxis = false;
     public bool lockYAxis = false;
+
+    // Boundary
     public bool useBoundaryPositions = false;
     public Vector2 boundaryTopLeft;
     public Vector2 boundaryBottomRight;
 
-    private Vector3 lastPlayerPosition;
-    private bool CaughtPlayer = true;
-    private bool runOnce = false;
-    private float timerCounter = 0;
-    private float catchUpVelocity;
+    // Follow codes
+    public bool useLazyCamera = false;
+    [Range(0, 100)] public float followSpeedPercentage;
+    private float inverseSpeed;
 
     // Shake Code
-    public bool useCameraShake;
+    public bool useCameraShake = false;
     [Range(0, 1)] public float trauma;
     [Range(0, 1)] public float traumaReductionRate;
     private float shake;
     public float maxPositionOffset;
     public float maxAngleOffset;
-
-
+    public Vector3 lockedCameraPostion;
 
     public void Contruct(GameObject player, float cameraDelay, float maxSpeed)
     {
         Player = player;
-        CameraDelay = cameraDelay;
-        MaxSpeed = maxSpeed;
     }
+
     // Start is called before the first frame update
     public void Start()
     {
-        Vector3 currentPlayerPosition = Player.transform.position;
-        //currentPlayerPosition = currentPlayerPosition - new Vector3(PermanentOffset.x, PermanentOffset.y, 0);
-        Vector3 newCamPos;
-        newCamPos.x = currentPlayerPosition.x;
-        newCamPos.y = currentPlayerPosition.y;
-        newCamPos.z = transform.position.z;
-        transform.position = newCamPos;
-        lastPlayerPosition = Player.transform.position;
-        CaughtPlayer = true;
-        runOnce = true;
-        timerCounter = CameraDelay;
+        lockedCameraPostion = transform.position;
+        followSpeedPercentage = followSpeedPercentage / 100;
+        inverseSpeed = 1.0f - followSpeedPercentage;
     }
 
     // Update is called once per frame
     public void Update()
     {
-        setCamera();
-        if (useCameraShake == true)
+        // Lazy Camera Following
+        if (useLazyCamera == true)
         {
-            applyCameraShake();
+            follow();       // Follow player based on inputs
         }
-    }
+        else
+        {
+            transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, transform.position.z);
+        }
 
-    public void setCamera()
-    {
-        Vector3 currentCameraPosition = transform.position;
-        Vector3 currentPlayerPosition = Player.transform.position;
-        Vector3 differenceVector = currentPlayerPosition - currentCameraPosition;
-        Vector3 newCamPos = currentCameraPosition;
-
-        Vector2 newDiff = new Vector2(differenceVector.x, differenceVector.y);
-        if(CameraDelay <= 0)
+        if (usePointOfFocus == true)
         {
-            if(lockXAxis == false)
-                newCamPos.x = currentPlayerPosition.x;
-            if (lockYAxis == false)
-                newCamPos.y = currentPlayerPosition.y;
-        }
-        else if (newDiff.magnitude < 0.05f)
-        {
-            if (lockXAxis == false)
-                newCamPos.x = currentPlayerPosition.x;
-            if (lockYAxis == false)
-                newCamPos.y = currentPlayerPosition.y;
-            runOnce = false;
-            CaughtPlayer = true;
-        }
-        else if (newDiff.magnitude > 0.05f && runOnce == false)
-        {
-            runOnce = true;
-            timerCounter = CameraDelay;
-            CaughtPlayer = false;
-            catchUpVelocity = 0;
-        }
-       
-     
-        if(false == CaughtPlayer)
-        {
-            timerCounter -= 0.01f;
-            if(timerCounter <= 0.0f)
+            if (PointOfFocus != null)
             {
-                newDiff.Normalize();
-
-                if ((catchUpVelocity + CameraAcceleration) <= MaxSpeed)
-                {
-                    catchUpVelocity += CameraAcceleration;
-                }
-                newDiff = newDiff * catchUpVelocity;
-
-                if (lockXAxis == false)
-                    newCamPos.x = currentCameraPosition.x + newDiff.x/1000;
-                if (lockYAxis == false)
-                    newCamPos.y = currentCameraPosition.y + newDiff.y/1000;
+                evaluatePointOfFocus();
             }
         }
-
-        if(useBoundaryPositions == true)
+        if (useBoundaryPositions == true)
         {
-            if(newCamPos.x < boundaryTopLeft.x)
-                newCamPos.x = boundaryTopLeft.x;
-            if (newCamPos.y > boundaryTopLeft.y)
-                newCamPos.y = boundaryTopLeft.y;
+            boundaryCheck();
+        }
+        // Camera Shake
+        if (useCameraShake == true)
+        {
+            applyCameraShake();     // Apply shake on trauma
+        }
+    }
 
-            if (newCamPos.x > boundaryBottomRight.x)
-                newCamPos.x = boundaryBottomRight.x;
-            if (newCamPos.y < boundaryBottomRight.y)
-                newCamPos.y = boundaryBottomRight.y;
+    public void follow()
+    {
+        // Asymototic smoothing
+        Vector3 currentCameraPosition = transform.position;
+        Vector3 currentPlayerPosition = Player.transform.position;
+
+        // Start position
+        float newX = lockedCameraPostion.x;
+        float newY = lockedCameraPostion.y;
+
+        // If axis is not locked
+        if (lockXAxis == false)
+        {
+            newX = transform.position.x;        // Start at current position
+            float targetX = currentPlayerPosition.x;        // Player
+            newX = (inverseSpeed * newX) + (followSpeedPercentage * targetX);      // Move to it by %
+        }
+        if (lockYAxis == false)
+        {
+            newY = transform.position.y;
+            float targetY = currentPlayerPosition.y;
+            newY = (inverseSpeed * newY) + (followSpeedPercentage * targetY);
         }
 
-        newCamPos.z = transform.position.z;
-        transform.position = newCamPos;
-        lastPlayerPosition = Player.transform.position;
+        // Apply new positions
+        currentCameraPosition = new Vector3(newX, newY, transform.position.z);
+        transform.position = currentCameraPosition;
     }
 
-    public float getVel()
+    public void boundaryCheck()
     {
-        return catchUpVelocity;    
+        Vector3 newCamPos = transform.position;
+        if (newCamPos.x < boundaryTopLeft.x)
+            newCamPos.x = boundaryTopLeft.x;
+        if (newCamPos.y > boundaryTopLeft.y)
+            newCamPos.y = boundaryTopLeft.y;
+        if (newCamPos.x > boundaryBottomRight.x)
+            newCamPos.x = boundaryBottomRight.x;
+        if (newCamPos.y < boundaryBottomRight.y)
+            newCamPos.y = boundaryBottomRight.y;
+        transform.position = newCamPos;
     }
-
-
     public void applyCameraShake()
     {
-        if(trauma > 1)
+        // Decrement the shake (Stop it shaking forever)
+        trauma -= (traumaReductionRate / 100);
+
+        // Keep in range
+        if (trauma > 1.0f)
         {
             trauma = 1.0f;
         }
-        // Decrement the shake (Stop it shaking forever)
-        trauma -= (traumaReductionRate/100);
-        if(trauma < 0)
+        else if (trauma < 0.0f)
         {
-            trauma = 0;
+            trauma = 0.0f;
         }
 
         // Shake is equal to the traum squared to give a smooth curve of shake
@@ -161,20 +142,58 @@ public class DynamicCameraController : MonoBehaviour
         transform.eulerAngles = new Vector3(0, 0, 0);
 
         // Determine how much to offset the rotationa and translation
-        float offsetAngle = maxAngleOffset * shake * Random.Range(-0.5f, 0.5f); 
+        float offsetAngle = maxAngleOffset * shake * Random.Range(-0.5f, 0.5f);
         float offsetX = maxPositionOffset * shake * Random.Range(-0.5f, 0.5f);
-        float offsetY = maxPositionOffset * shake * Random.Range(-1.0f, 1.0f); 
-   
+        float offsetY = maxPositionOffset * shake * Random.Range(-1.0f, 1.0f);
+
         // Get current state
         Vector3 currentCameraAngle = transform.eulerAngles;
         Vector3 currentCameraPosition = transform.position;
 
         // Current state + shake
-        Vector3 newCameraAngle = currentCameraAngle + new Vector3( 0, 0, offsetAngle);
+        Vector3 newCameraAngle = currentCameraAngle + new Vector3(0, 0, offsetAngle);
         Vector3 newCameraPosition = currentCameraPosition + new Vector3(offsetX, offsetY, 0);
 
         // Apply
         transform.position = newCameraPosition;
         transform.eulerAngles = newCameraAngle;
+    }
+
+    public void evaluatePointOfFocus()
+    {
+        Vector3 focusPos = PointOfFocus.transform.position;
+        Vector3 currentPos = Player.transform.position;
+        Vector3 difference = focusPos - currentPos;
+
+        // Size of the ortographic camera
+        float height = 2f * GetComponent<Camera>().orthographicSize;
+        float width = height * GetComponent<Camera>().aspect;
+
+        Vector3 allowedDistance = new Vector3(width - (0.4f * width), height - (0.4f * height), 0);
+
+        // If the player is close enough to the point of focus
+        if (difference.sqrMagnitude < allowedDistance.sqrMagnitude)
+        {
+            if (useLazyCamera == true)
+            {
+                smoothAdjustment(difference);       // Smoother adjustment
+            }
+            else
+            {
+                transform.position = new Vector3(Player.transform.position.x + difference.x / 2, Player.transform.position.y + difference.y / 2, transform.position.z);     // Snappy adjustment
+            }
+        }
+    }
+    public void smoothAdjustment(Vector3 t_difference)
+    {
+        // Figorue out where we want to be
+        Vector3 finalPosition = new Vector3(Player.transform.position.x + t_difference.x / 2, Player.transform.position.y + t_difference.y / 2, transform.position.z);
+
+        // Move toward it with the same speed as the lazy cam for consistancy
+        float newX = (inverseSpeed * transform.position.x) + (followSpeedPercentage * finalPosition.x);      // Move to it by %
+        float newY = (inverseSpeed * transform.position.y) + (followSpeedPercentage * finalPosition.y);
+
+        // Apply new value
+        transform.position = new Vector3(newX, newY, transform.position.z);
     }
 }
