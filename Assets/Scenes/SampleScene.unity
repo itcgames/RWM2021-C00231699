@@ -208,6 +208,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1189667538834389786}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1106123079 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6605066223900338046, guid: 011a18cec56dad649ab35534a96b7797,
+    type: 3}
+  m_PrefabInstance: {fileID: 6605066224134463234}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1361568383
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,6 +555,16 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1189667539575098437, guid: e3d64062f68f05d478903f10c83154d0,
+        type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 1106123079}
+    - target: {fileID: 1189667539575098488, guid: e3d64062f68f05d478903f10c83154d0,
+        type: 3}
+      propertyPath: m_GravityScale
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1189667539575098491, guid: e3d64062f68f05d478903f10c83154d0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -621,7 +637,7 @@ PrefabInstance:
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: CameraDelay
-      value: 0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
@@ -631,7 +647,7 @@ PrefabInstance:
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: lockYAxis
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
@@ -666,7 +682,37 @@ PrefabInstance:
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: useBoundaryPositions
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: trauma
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: maxAngleOffset
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: maxPositionOffset
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: traumaReduction
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: useCameraShake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: traumaReductionRate
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338046, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}

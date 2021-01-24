@@ -6,10 +6,11 @@ public class playerMovement : MonoBehaviour
 {
     public float moveSpeed;
     public float jumpHeight;
-
+    public GameObject camera;
+    public bool landed = false;
     void Start()
     {
-
+        
     }
 
     void Update()
@@ -27,6 +28,7 @@ public class playerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            landed = false;
             GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
         }
 
@@ -36,5 +38,16 @@ public class playerMovement : MonoBehaviour
     public void moveRight()
     {
         GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(landed == false)
+        {
+            Debug.Log("Hit");
+            landed = true;
+            camera.GetComponent<DynamicCameraController>().trauma = 1.0f;
+        }
+       
     }
 }

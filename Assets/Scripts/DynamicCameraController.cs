@@ -22,6 +22,15 @@ public class DynamicCameraController : MonoBehaviour
     private float timerCounter = 0;
     private float catchUpVelocity;
 
+    // Shake Code
+    public bool useCameraShake;
+    [Range(0, 1)] public float trauma;
+    [Range(0, 1)] public float traumaReductionRate;
+    private float shake;
+    public float maxPositionOffset;
+    public float maxAngleOffset;
+
+
 
     public void Contruct(GameObject player, float cameraDelay, float maxSpeed)
     {
@@ -49,6 +58,10 @@ public class DynamicCameraController : MonoBehaviour
     public void Update()
     {
         setCamera();
+        if (useCameraShake == true)
+        {
+            applyCameraShake();
+        }
     }
 
     public void setCamera()
@@ -125,5 +138,43 @@ public class DynamicCameraController : MonoBehaviour
     public float getVel()
     {
         return catchUpVelocity;    
+    }
+
+
+    public void applyCameraShake()
+    {
+        if(trauma > 1)
+        {
+            trauma = 1.0f;
+        }
+        // Decrement the shake (Stop it shaking forever)
+        trauma -= (traumaReductionRate/100);
+        if(trauma < 0)
+        {
+            trauma = 0;
+        }
+
+        // Shake is equal to the traum squared to give a smooth curve of shake
+        shake = trauma * trauma;
+
+        // Reset Camera rotation
+        transform.eulerAngles = new Vector3(0, 0, 0);
+
+        // Determine how much to offset the rotationa and translation
+        float offsetAngle = maxAngleOffset * shake * Random.Range(-0.5f, 0.5f); 
+        float offsetX = maxPositionOffset * shake * Random.Range(-0.5f, 0.5f);
+        float offsetY = maxPositionOffset * shake * Random.Range(-1.0f, 1.0f); 
+   
+        // Get current state
+        Vector3 currentCameraAngle = transform.eulerAngles;
+        Vector3 currentCameraPosition = transform.position;
+
+        // Current state + shake
+        Vector3 newCameraAngle = currentCameraAngle + new Vector3( 0, 0, offsetAngle);
+        Vector3 newCameraPosition = currentCameraPosition + new Vector3(offsetX, offsetY, 0);
+
+        // Apply
+        transform.position = newCameraPosition;
+        transform.eulerAngles = newCameraAngle;
     }
 }
