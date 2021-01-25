@@ -40,6 +40,11 @@ public class playerMovement : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
     }
 
+    public void jump()
+    {
+        GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
+    }
+
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if(landed == false)

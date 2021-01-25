@@ -32,15 +32,16 @@ public class DynamicCameraController : MonoBehaviour
     private float shake;
     public float maxPositionOffset;
     public float maxAngleOffset;
-    public Vector3 lockedCameraPostion;
+    private Vector3 lockedCameraPostion;
 
     // Player velocity 
     public bool velocityAdjust = false;
     public float minVelocityAdjust;
 
-    public void Contruct(GameObject player, float cameraDelay, float maxSpeed)
+    public void Contruct(GameObject player, GameObject enemy = null)
     {
         Player = player;
+        PointOfFocus = enemy;
     }
 
     // Start is called before the first frame update

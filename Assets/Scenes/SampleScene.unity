@@ -1606,7 +1606,7 @@ PrefabInstance:
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: trauma
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
@@ -1631,7 +1631,7 @@ PrefabInstance:
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: traumaReductionRate
-      value: 0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
