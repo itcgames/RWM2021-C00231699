@@ -34,6 +34,10 @@ public class DynamicCameraController : MonoBehaviour
     public float maxAngleOffset;
     public Vector3 lockedCameraPostion;
 
+    // Player velocity 
+    public bool velocityAdjust = false;
+    public float minVelocityAdjust;
+
     public void Contruct(GameObject player, float cameraDelay, float maxSpeed)
     {
         Player = player;
@@ -60,6 +64,14 @@ public class DynamicCameraController : MonoBehaviour
             transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, transform.position.z);
         }
 
+        // Player velocity
+        if(velocityAdjust == true && useLazyCamera == false)
+        {
+            adjustForVelocity();
+        }
+
+
+        // Evaluate Point og focus
         if (usePointOfFocus == true)
         {
             if (PointOfFocus != null)
@@ -67,10 +79,13 @@ public class DynamicCameraController : MonoBehaviour
                 evaluatePointOfFocus();
             }
         }
+
+        // Boundary Check
         if (useBoundaryPositions == true)
         {
             boundaryCheck();
         }
+
         // Camera Shake
         if (useCameraShake == true)
         {
@@ -195,5 +210,30 @@ public class DynamicCameraController : MonoBehaviour
 
         // Apply new value
         transform.position = new Vector3(newX, newY, transform.position.z);
+    }
+
+
+    public void adjustForVelocity()
+    {
+        // Get the player velocity
+        Vector3 velocityOfPlayer = Player.GetComponent<Rigidbody2D>().velocity;
+
+        // If the players velocity is higher the minimum threshold 
+        if(Mathf.Abs(velocityOfPlayer.x) > minVelocityAdjust)
+        {
+            float adjustValue =  minVelocityAdjust / Mathf.Abs(velocityOfPlayer.x);
+            Vector3 newPosition = transform.position + new Vector3(velocityOfPlayer.x * (1 -adjustValue), 0, 0);
+            if(transform.position.x != newPosition.x)
+            {
+                float newX = (0.80f * transform.position.x) + (0.2f * newPosition.x);      // Move to it by %
+                float newY = (0.80f * transform.position.y) + (0.2f * newPosition.y);
+                transform.position = new Vector3(newX, newY, transform.position.z);
+            }          
+        }
+    }
+
+    public void smoothVelocityAdjustment()
+    {
+
     }
 }

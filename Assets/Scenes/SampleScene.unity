@@ -1469,6 +1469,16 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1106123079}
+    - target: {fileID: 1189667539575098437, guid: e3d64062f68f05d478903f10c83154d0,
+        type: 3}
+      propertyPath: jumpHeight
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1189667539575098437, guid: e3d64062f68f05d478903f10c83154d0,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 1189667539575098488, guid: e3d64062f68f05d478903f10c83154d0,
         type: 3}
       propertyPath: m_GravityScale
@@ -1477,12 +1487,12 @@ PrefabInstance:
     - target: {fileID: 1189667539575098491, guid: e3d64062f68f05d478903f10c83154d0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.13
+      value: -10.49
       objectReference: {fileID: 0}
     - target: {fileID: 1189667539575098491, guid: e3d64062f68f05d478903f10c83154d0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.77
+      value: -4.89
       objectReference: {fileID: 0}
     - target: {fileID: 1189667539575098491, guid: e3d64062f68f05d478903f10c83154d0,
         type: 3}
@@ -1591,7 +1601,7 @@ PrefabInstance:
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: useBoundaryPositions
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
@@ -1626,23 +1636,33 @@ PrefabInstance:
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: followSpeedPercentage
-      value: 1
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: useLazyCamera
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: usePointOfFocus
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: PointOfFocus
       value: 
       objectReference: {fileID: 1610778318}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: velocityAdjust
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605066223900338044, guid: 011a18cec56dad649ab35534a96b7797,
+        type: 3}
+      propertyPath: minVelocityAdjust
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6605066223900338046, guid: 011a18cec56dad649ab35534a96b7797,
         type: 3}
       propertyPath: m_Name
