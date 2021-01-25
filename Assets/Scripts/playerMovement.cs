@@ -51,7 +51,7 @@ public class playerMovement : MonoBehaviour
         {
             Debug.Log("Hit");
             landed = true;
-            camera.GetComponent<DynamicCameraController>().trauma = 1.0f;
+            camera.GetComponent<DynamicCameraController>().trauma = 0.7f;
         }
        
     }

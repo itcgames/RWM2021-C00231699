@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// Author: Robin Meyler -> 2020/2021
+
+
 public class DynamicCameraController : MonoBehaviour
 {
     // General
@@ -48,6 +52,7 @@ public class DynamicCameraController : MonoBehaviour
     public void Start()
     {
         lockedCameraPostion = transform.position;
+        transform.position = new Vector3(lockedCameraPostion.x, lockedCameraPostion.y, transform.position.z);
         followSpeedPercentage = followSpeedPercentage / 100;
         inverseSpeed = 1.0f - followSpeedPercentage;
     }
